@@ -10,16 +10,17 @@ export const client = createClient({
 
 // [TODO] Use once all the item parsing can be confirmed
 const parseGames = items =>
-  items.map(({ fields }) => {
-    const { fields: stadium } =
-      fields.location || fields.homeTeam.fields.stadium;
-    const {
-      homeTeam: { fields: homeTeam }
-    } = fields;
+  items.map(({ fields, ...rest }) => {
+    // const {
+    //   homeTeam: { fields: homeTeam }
+    // } = fields;
+
+    const returnFields = fields;
+    returnFields.location = fields.location || fields.homeTeam.fields.stadium;
 
     return {
-      homeTeam,
-      stadium
+      fields: returnFields,
+      ...rest
     };
   });
 
@@ -32,5 +33,11 @@ export const getEntries = contentType =>
       content_type: contentType,
       include: 3
     })
-    .then(({ items }) => items)
+    .then(({ items }) => {
+      if (contentType === 'games') {
+        return parseGames(items);
+      }
+
+      return items;
+    })
     .catch(console.error);

@@ -5,6 +5,11 @@ import express from 'express';
 import path from 'path';
 import createError from 'http-errors';
 
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import config from '../../webpack.dev';
+const compiler = webpack(config);
+
 // Utilities
 import { getContentTypes, getEntries } from './contentfulClient';
 
@@ -15,7 +20,13 @@ const port = process.env.PORT || 8001;
 // Setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, '../'))); // Only resolves correctly AFTER babel compile
+// app.use(express.static(path.join(__dirname, '../'))); // Only resolves correctly AFTER babel compile
+
+app.use(
+  webpackDevMiddleware(compiler, {
+    publicPath: config.output.publicPath
+  })
+);
 
 app.get('/api', async (_req, res) => res.json(await getContentTypes()));
 

@@ -24,13 +24,11 @@ const App = () => {
     console.log('DATE CHANGE - date', date);
   };
 
-  console.log('games', games);
-
   return (
     <section>
       <h1>GAMES</h1>
       <Calendar onChange={handleChange} />
-      <Map />
+      <Map locations={games.map(game => game.fields.location)} />
       {games.map(game => (
         <article key={game.sys.id}>
           <h1>Matchup: {game.fields.matchupName}</h1>
