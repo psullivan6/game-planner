@@ -1,8 +1,9 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+import { createClient } from 'contentful';
 
-const contentful = require('contentful');
+dotenv.config();
 
-export const client = contentful.createClient({
+export const client = createClient({
   space: process.env.SPACE_ID,
   accessToken: process.env.ACCESS_TOKEN
 });
@@ -16,10 +17,8 @@ const parseGames = items =>
       homeTeam: { fields: homeTeam }
     } = fields;
 
-    console.log('DATA', homeTeam, '\n\n', stadium, '\n\n\n');
-
     return {
-      homeTeam: fields.homeTeam,
+      homeTeam,
       stadium
     };
   });
