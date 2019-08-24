@@ -1,0 +1,38 @@
+{
+  "name": "boilerplate-javascript",
+  "version": "1.0.0",
+  "description": "A boilerplate javascript project",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx babel-node server/index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/contentful/boilerplate-javascript.git"
+  },
+  "engines": {
+    "node": ">=4.7.2"
+  },
+  "keywords": [
+    "Contentful",
+    "boilerplate",
+    "Getting-Started"
+  ],
+  "author": "Khaled Garbaya <khaled@contentful.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/contentful/boilerplate-javascript/issues"
+  },
+  "homepage": "https://github.com/contentful/boilerplate-javascript#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "contentful": "^7.9.1",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
