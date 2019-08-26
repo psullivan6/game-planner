@@ -1,32 +1,24 @@
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-
-import express from 'express';
-import path from 'path';
-import createError from 'http-errors';
-
-import webpack from 'webpack';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import config from '../../webpack.dev';
-const compiler = webpack(config);
+const express = require('express');
+// import createError from 'http-errors';
+const serverProd = require('./server.prod');
+const serverDev = require('./server.dev');
 
 // Utilities
-import { getContentTypes, getEntries } from './contentfulClient';
+const { getContentTypes, getEntries } = require('./contentfulClient');
 
 // Variables
 const app = express();
-const port = process.env.PORT || 8001;
+const port = process.env.PORT || 3000;
 
 // Setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(express.static(path.join(__dirname, '../'))); // Only resolves correctly AFTER babel compile
 
-app.use(
-  webpackDevMiddleware(compiler, {
-    publicPath: config.output.publicPath
-  })
-);
+if (process.env.NODE_ENV === 'production') {
+  serverProd(app);
+} else {
+  serverDev(app);
+}
 
 app.get('/api', async (_req, res) => res.json(await getContentTypes()));
 

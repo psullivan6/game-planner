@@ -1,9 +1,7 @@
-import dotenv from 'dotenv';
-import { createClient } from 'contentful';
+require('dotenv').config();
+const { createClient } = require('contentful');
 
-dotenv.config();
-
-export const client = createClient({
+const client = createClient({
   space: process.env.SPACE_ID,
   accessToken: process.env.ACCESS_TOKEN
 });
@@ -24,10 +22,10 @@ const parseGames = items =>
     };
   });
 
-export const getContentTypes = () =>
+exports.getContentTypes = () =>
   client.getContentTypes().then(response => response.items);
 
-export const getEntries = contentType =>
+exports.getEntries = contentType =>
   client
     .getEntries({
       content_type: contentType,
