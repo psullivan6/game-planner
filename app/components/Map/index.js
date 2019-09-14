@@ -17,7 +17,7 @@ const extraLocation = [-119.821944, 39.527222];
 mapboxgl.accessToken =
   'pk.eyJ1IjoicHN1bGxpdmFuNiIsImEiOiJLckJWdW9RIn0.eO3wQQyUjIbT7pvPcEa6vw';
 
-const createPoint = coordinates => {
+const createPoint = ({ coordinates, id }) => {
   const point = {
     type: 'Feature',
     geometry: {
@@ -25,7 +25,7 @@ const createPoint = coordinates => {
       coordinates
     },
     properties: {
-      id: String(new Date().getTime())
+      id,
     }
   };
 
@@ -50,18 +50,28 @@ const setupDots = ({ locations, map }) => {
     filter: ['in', '$type', 'Point']
   });
 
-  map.on('click', 'points', function(e) {
+  map.on('click', 'points', (e) => {
     map.flyTo({ center: e.features[0].geometry.coordinates, zoom: 14 });
   });
 
-  locations.forEach(location => {
-    createPoint(Object.values(location.fields.location));
+
+  const uniqueLocations = locations.filter((location, index, self) => (
+    index === self.findIndex(loc => loc.sys.id === location.sys.id)
+  ));
+
+  uniqueLocations.forEach(location => {
+    createPoint({
+      coordinates: Object.values(location.fields.location),
+      id: location.sys.id
+    });
   });
 
   map.getSource('geojson').setData(geojson);
-  map.fitBounds(geojson.features.map(feature => feature.geometry.coordinates), {
-    padding: 20
-  });
+
+  map.fitBounds(
+    geojson.features.map(feature => feature.geometry.coordinates),
+    { padding: 20 }
+  );
 };
 
 const addLocation = map => {

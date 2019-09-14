@@ -32,9 +32,9 @@ const App = () => {
       {games.map(game => (
         <article key={game.sys.id}>
           <h1>Matchup: {game.fields.matchupName}</h1>
-          <p>Date: {game.fields.date}</p>
-          <h1>Home Team: {game.fields.homeTeam.fields.name}</h1>
-          <h1>Away Team: {game.fields.awayTeam.fields.name}</h1>
+          <h2>Date: {game.fields.date}</h2>
+          <span>Home Team: {game.fields.homeTeam.fields.name}</span>
+          <span>Away Team: {game.fields.awayTeam.fields.name}</span>
           <hr />
         </article>
       ))}
