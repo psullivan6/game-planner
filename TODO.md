@@ -1,0 +1,3 @@
+- Add new marker icons
+  - add quantity of games at location inside the marker
+  - TRY to add logos, see if scale works

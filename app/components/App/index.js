@@ -1,40 +1,33 @@
 import React, { useEffect, useState } from 'react';
 
 // Services
-import { getGames } from '../../services/GamesService';
+import { useGames } from '../../services/GamesService/context';
 
 // Components
 import Calendar from '../Calendar';
 import Map from '../Map';
 
 const App = () => {
-  const [games, setGames] = useState([]);
+  const { filteredGames: games, hasLoaded } = useGames();
 
-  useEffect(() => {
-    getGames().then(games => {
-      setGames(games);
-    });
-  }, []);
-
-  if (games.length === 0) {
+  if (!hasLoaded) {
     return <h1>LOADING...</h1>;
   }
-
-  const handleChange = date => {
-    console.log('DATE CHANGE - date', date);
-  };
 
   return (
     <section>
       <h1>GAMES</h1>
-      <Calendar onChange={handleChange} />
+
+      <Calendar />
+
       <Map locations={games.map(game => game.fields.location)} />
+
       {games.map(game => (
         <article key={game.sys.id}>
           <h1>Matchup: {game.fields.matchupName}</h1>
           <h2>Date: {game.fields.date}</h2>
-          <span>Home Team: {game.fields.homeTeam.fields.name}</span>
-          <span>Away Team: {game.fields.awayTeam.fields.name}</span>
+          <p>Home Team: {game.fields.homeTeam.fields.name}</p>
+          <p>Away Team: {game.fields.awayTeam.fields.name}</p>
           <hr />
         </article>
       ))}

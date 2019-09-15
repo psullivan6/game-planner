@@ -1,23 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import { addDays, isAfter, isWithinInterval, parseISO, subDays } from 'date-fns'
 
-const Calendar = props => {
+// Context
+import { useGames } from '../../services/GamesService/context';
+
+const Calendar = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const { onFilterChange } = useGames();
 
-  const handleStartChange = dateChange => {
-    setStartDate(dateChange);
-    // props.onChange(date);
+  const handleStartChange = newStartDate => {
+    setStartDate(newStartDate);
+
+    if (!isAfter(endDate, newStartDate)) {
+      setEndDate(addDays(newStartDate, 1));
+    }
   };
 
-  const handleEndChange = dateChange => {
-    setEndDate(dateChange);
-    // props.onChange(date);
+  const handleEndChange = newEndDate => {
+    setEndDate(newEndDate);
+
+    if (!isAfter(newEndDate, startDate)) {
+      setStartDate(subDays(newEndDate, 1));
+    }
   };
 
   useEffect(() => {
-    console.log('WUZ A CHANGE\n', startDate, '\n', endDate);
+    onFilterChange((game) => (
+      isWithinInterval(parseISO(game.fields.date), {
+        start: startDate,
+        end: endDate
+      })
+    ))
   }, [startDate, endDate]);
 
   return (

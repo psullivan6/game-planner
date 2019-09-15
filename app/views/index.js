@@ -4,4 +4,12 @@ import { render } from 'react-dom';
 // Components
 import App from '../components/App';
 
-render(<App />, document.getElementById('main'));
+// Context
+import { GamesProvider } from '../services/GamesService/context';
+
+render(
+  <GamesProvider>
+    <App />
+  </GamesProvider>,
+  document.getElementById('main')
+);
